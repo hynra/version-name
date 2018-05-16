@@ -15,27 +15,30 @@ public class VersionName {
         void onVersionLoaded(String versionName, boolean isWithVaries);
     }
 
-    public void get(String packageName, Listener listener){
-
+    public static void get(String packageName, Listener listener){
+        new GetVersionName(listener, packageName).execute();
     }
 
-    private class GetVersionName extends AsyncTask<Void, String, String> {
+    private static class GetVersionName extends AsyncTask<Void, String, String> {
 
         private Listener listener;
-        GetVersionName(Listener listener) {
+        private String packageName;
+
+        GetVersionName(Listener listener, String packageName) {
             super();
             this.listener = listener;
+            this.packageName = packageName;
         }
 
         @Override
         protected String doInBackground(Void... voids) {
             String newVersion = "oops";
             try {
-                newVersion = Jsoup.connect("https://play.google.com/store/apps/details?id=" + "app.pptik.itb.semut" + "&hl=en").timeout(30000)
+                newVersion = Jsoup.connect("https://play.google.com/store/apps/details?id=" + packageName + "&hl=en").timeout(30000)
                         .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").referrer("http://www.google.com")
                         .get()
-                        .select(".hAyfc .htlgb")
-                        .get(5)
+                        .select(".htlgb .htlgb")
+                        .get(3)
                         .ownText();
                 return newVersion;
             } catch (Exception e) {
@@ -44,9 +47,9 @@ public class VersionName {
         }
 
         @Override
-        protected void onPostExecute(String onlineVersion) {
-            super.onPostExecute(onlineVersion);
-
+        protected void onPostExecute(String currentVersion) {
+            super.onPostExecute(currentVersion);
+            listener.onVersionLoaded(currentVersion, false);
         }
     }
 }
