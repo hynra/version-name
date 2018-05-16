@@ -21,6 +21,12 @@ public class VersionName {
 
     private class GetVersionName extends AsyncTask<Void, String, String> {
 
+        private Listener listener;
+        GetVersionName(Listener listener) {
+            super();
+            this.listener = listener;
+        }
+
         @Override
         protected String doInBackground(Void... voids) {
             String newVersion = "oops";
