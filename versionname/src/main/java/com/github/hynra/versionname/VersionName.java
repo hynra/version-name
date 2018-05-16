@@ -23,6 +23,7 @@ public class VersionName {
 
         private Listener listener;
         private String packageName;
+        private final String VARIES_TEXT = "Varies with device";
 
         GetVersionName(Listener listener, String packageName) {
             super();
@@ -32,7 +33,7 @@ public class VersionName {
 
         @Override
         protected String doInBackground(Void... voids) {
-            String newVersion = "oops";
+            String newVersion = "";
             try {
                 newVersion = Jsoup.connect("https://play.google.com/store/apps/details?id=" + packageName + "&hl=en").timeout(30000)
                         .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").referrer("http://www.google.com")
@@ -49,7 +50,8 @@ public class VersionName {
         @Override
         protected void onPostExecute(String currentVersion) {
             super.onPostExecute(currentVersion);
-            listener.onVersionLoaded(currentVersion, false);
+            boolean isVaries = currentVersion.contains(VARIES_TEXT);
+            listener.onVersionLoaded(currentVersion, isVaries);
         }
     }
 }

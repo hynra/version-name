@@ -12,7 +12,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        VersionName.get("app.pptik.itb.semut", new VersionName.Listener() {
+        VersionName.get("com.google.android.youtube", new VersionName.Listener() {
             @Override
             public void onVersionLoaded(String versionName, boolean isWithVaries) {
                 Log.i("Version", versionName+", is varies: "+isWithVaries);
