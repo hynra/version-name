@@ -11,7 +11,16 @@ import org.jsoup.Jsoup;
 public class VersionName {
 
 
-    private class GetVersionNmae extends AsyncTask<Void, String, String> {
+    public interface Listener{
+        void onVersionLoaded(String versionName, boolean isWithVaries);
+    }
+
+    public void get(String packageName, Listener listener){
+
+    }
+
+    private class GetVersionName extends AsyncTask<Void, String, String> {
+
         @Override
         protected String doInBackground(Void... voids) {
             String newVersion = "oops";
