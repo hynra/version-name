@@ -16,17 +16,20 @@ public class VersionName {
     private static final String BEFORE_STRING = "requires";
     private static final String AFTER_STRING = "current version";
 
+    private static final int PLAYSTORE_PROVIDER = 0;
+    private static final int APKPURE_PROVIDER = 1;
+
 
     public interface Listener {
         void onVersionLoaded(String versionName, boolean isWithVaries);
     }
 
     public static void get(String packageName, Listener listener) {
-        new GetVersionName(listener, packageName, AFTER_STRING, BEFORE_STRING).execute();
+        new GetVersionName(listener, packageName, AFTER_STRING, BEFORE_STRING, PLAYSTORE_PROVIDER).execute();
     }
 
     public static void get(String packageName, String afterText, String beforeText, Listener listener) {
-        new GetVersionName(listener, packageName, afterText, beforeText).execute();
+        new GetVersionName(listener, packageName, afterText, beforeText, PLAYSTORE_PROVIDER).execute();
     }
 
     private static class GetVersionName extends AsyncTask<Void, String, String> {
@@ -55,10 +58,12 @@ public class VersionName {
         private String packageName;
         private String afterText;
         private String beforeText;
+        private int provider;
         private final String VARIES_TEXT = "varies with device";
 
-        GetVersionName(Listener listener, String packageName, String afterText, String beforeText) {
+        GetVersionName(Listener listener, String packageName, String afterText, String beforeText, int provider) {
             super();
+            this.provider = provider;
             this.listener = listener;
             this.packageName = packageName;
             this.afterText = afterText;
