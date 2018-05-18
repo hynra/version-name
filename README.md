@@ -38,9 +38,12 @@ Simple library to get current app version name from Play Strore
             public void onVersionLoaded(String versionName, boolean isWithVaries) {
                 TextView t = findViewById(R.id.text);
                 if(isWithVaries){
-                // 0.4.8
+                
                     t.setText("Version not found, app varies");
-                }else t.setText(versionName);
+                }else {
+		    // 0.4.8
+		    t.setText(versionName);
+		}
             }
         });
  ```
