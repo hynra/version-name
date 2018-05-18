@@ -1,5 +1,8 @@
 # version-name
-Simple library to get current app version name from Play Strore
+
+[![](https://jitpack.io/v/hynra/version-name.svg)](https://jitpack.io/#hynra/version-name)
+
+Simple library to get current app version name from Play Strore 
 
 ### Installation
  in root project: 
