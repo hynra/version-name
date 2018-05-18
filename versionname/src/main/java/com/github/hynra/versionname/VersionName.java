@@ -13,11 +13,12 @@ import org.jsoup.select.Elements;
 
 public class VersionName {
 
-    private static final String BEFORE_STRING = "requires";
-    private static final String AFTER_STRING = "current version";
+    private static final String PLAYSTORE_BEFORE_STRING = "requires";
+    private static final String PLAYSTORE_AFTER_STRING = "current version";
 
-    private static final int PLAYSTORE_PROVIDER = 0;
-    private static final int APKPURE_PROVIDER = 1;
+    public static final int PLAYSTORE_PROVIDER = 0;
+
+    private static final String PLAYSTORE_URL = "https://play.google.com/store/apps/details?id=";
 
 
     public interface Listener {
@@ -25,7 +26,7 @@ public class VersionName {
     }
 
     public static void get(String packageName, Listener listener) {
-        new GetVersionName(listener, packageName, AFTER_STRING, BEFORE_STRING, PLAYSTORE_PROVIDER).execute();
+        new GetVersionName(listener, packageName, PLAYSTORE_AFTER_STRING, PLAYSTORE_BEFORE_STRING, PLAYSTORE_PROVIDER).execute();
     }
 
     public static void get(String packageName, String afterText, String beforeText, Listener listener) {
@@ -58,6 +59,7 @@ public class VersionName {
         private String packageName;
         private String afterText;
         private String beforeText;
+        private String url;
         private int provider;
         private final String VARIES_TEXT = "varies with device";
 
@@ -68,13 +70,21 @@ public class VersionName {
             this.packageName = packageName;
             this.afterText = afterText;
             this.beforeText = beforeText;
+            this.provider = provider;
+            switch (provider) {
+                case PLAYSTORE_PROVIDER:
+                    url = PLAYSTORE_URL;
+                    break;
+            }
         }
 
         @Override
         protected String doInBackground(Void... voids) {
             String newVersion = "";
             try {
-                Document doc = Jsoup.connect("https://play.google.com/store/apps/details?id=" + packageName + "&hl=en").timeout(30000)
+                if(provider == PLAYSTORE_PROVIDER)
+                    url = url + packageName + "&hl=en";
+                Document doc = Jsoup.connect(url).timeout(30000)
                         .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").referrer("http://www.google.com")
                         .get();
                 Elements spanTags = doc.getAllElements();
