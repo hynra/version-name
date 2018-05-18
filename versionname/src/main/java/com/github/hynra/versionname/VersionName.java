@@ -22,7 +22,11 @@ public class VersionName {
     }
 
     public static void get(String packageName, Listener listener) {
-        new GetVersionName(listener, packageName).execute();
+        new GetVersionName(listener, packageName, AFTER_STRING, BEFORE_STRING).execute();
+    }
+
+    public static void get(String packageName, String afterText, String beforeText, Listener listener) {
+        new GetVersionName(listener, packageName, afterText, beforeText).execute();
     }
 
     private static class GetVersionName extends AsyncTask<Void, String, String> {
@@ -49,12 +53,16 @@ public class VersionName {
 
         private Listener listener;
         private String packageName;
+        private String afterText;
+        private String beforeText;
         private final String VARIES_TEXT = "varies with device";
 
-        GetVersionName(Listener listener, String packageName) {
+        GetVersionName(Listener listener, String packageName, String afterText, String beforeText) {
             super();
             this.listener = listener;
             this.packageName = packageName;
+            this.afterText = afterText;
+            this.beforeText = beforeText;
         }
 
         @Override
@@ -70,7 +78,7 @@ public class VersionName {
                     newVersion += " " + text;
                 }
                 newVersion = newVersion.trim().replaceAll("[ ]{2,}", " ");
-                newVersion = between(newVersion, AFTER_STRING, BEFORE_STRING);
+                newVersion = between(newVersion, afterText, beforeText);
                 return newVersion;
             } catch (Exception e) {
                 return null;
